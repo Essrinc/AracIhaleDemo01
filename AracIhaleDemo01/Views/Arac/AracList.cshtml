@@ -1,0 +1,68 @@
+﻿@using AracIhaleDemo01.Models.DTOs
+@model AracDTO
+
+<form asp-action="AracListPost" asp-controller="Arac" method="post">
+
+    <label asp-for="AracMarkaID" class="control-label"></label>
+    <select id="MarkaList" asp-for="AracMarkaID" class="form-control" asp-items="@ViewBag.AracMarkalari">
+        <option>Lütfen marka seçiniz...</option>
+    </select>
+
+    <label asp-for="AracModelID" class="control-label"></label>
+    <select id="ModelList" asp-for="AracModelID" class="form-control" asp-items="@ViewBag.AracModelleri">
+        <option>Lütfen model seçiniz...</option>
+    </select>
+
+    <label asp-for="AracStatuID" class="control-label"></label>
+    <select id="StatuList" asp-for="AracStatuID" class="form-control" asp-items="@ViewBag.AracStatuleri">
+        <option>Lütfen statü seçiniz...</option>
+    </select>
+    <br />
+    <input id="submitButton" type="submit" value="Listele" style="margin-top:10px;" />
+    <br />
+</form>
+
+@section Scripts
+{
+    <script>
+        $("#submitButton").on('click', function () {
+            var marka = $("#MarkaList").val();
+            var model = $("#ModelList").val();
+            var statu = $("#StatuList").val();
+            debugger
+            $.getJSON("/Arac/AracListPost?aracMarkaId=" + marka + "&aracModelId=" + model + "&aracStatuId=" + statu, function (data) {
+                console.log(data);
+            });
+        });
+    </script>
+}
+
+@if (ViewBag.aracList != null)
+{
+    <div style="margin-top:20px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Araç Marka</th>
+                    <th>Araç Model</th>
+                    <th>Statü</th>
+                    <th>Kaydeden Kullanıcı</th>
+                    <th>Kaydetme Zamanı</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.aracList)
+                {
+                <tr>
+                    <td>@item.AracMarka</td>
+                    <td>@item.AracModel</td>
+                    <td>@item.Statu</td>
+                    <td>@item.KaydedenKullanici</td>
+                    <td>@item.KaydetmeZamani</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
